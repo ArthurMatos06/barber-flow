@@ -1,6 +1,10 @@
-import { Button } from "@/app/_components/ui/button"
-
+import Header from "./components/header"
 const page = () => {
-  return <Button>test</Button>
+  return (
+    <div>
+      {/* Header */}
+      <Header />
+    </div>
+  )
 }
 export default page
