@@ -1,8 +1,6 @@
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@/app/_components/ui/button"
 
 const page = () => {
-  return (
-                  <Button>test</Button>
-  )
+  return <Button>test</Button>
 }
 export default page
