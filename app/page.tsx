@@ -7,6 +7,7 @@ import { Card, CardContent } from "./components/ui/card"
 import { Badge } from "./components/ui/badge"
 import { Avatar, AvatarImage } from "./components/ui/avatar"
 const page = () => {
+  //chamando banco de dados
   return (
     <div>
       {/* Header */}
@@ -32,18 +33,21 @@ const page = () => {
           />
         </div>
         {/*Agendamento*/}
-        <Card className="mt-6 p-0">
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+        <Card className="p-0">
           <CardContent className="flex justify-between p-0">
             {/*esquerda*/}
             <div className="flex flex-col gap-2 py-5 pl-5">
               <Badge className="w-fit">Confirmado</Badge>
               <h3 className="font-semibold">Corte de Cabelo</h3>
-
-              <div className="flex items-center gap-2"></div>
-              <Avatar className="h-6 w-6">
-                <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png" />
-              </Avatar>
-              <p className="text-sm">Barbearia teste</p>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png" />
+                </Avatar>
+                <p className="text-sm">Barbearia teste</p>
+              </div>
             </div>
             {/*direita*/}
             <div className="flex flex-col items-center justify-center border-l-2 border-solid px-5">
