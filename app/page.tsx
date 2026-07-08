@@ -1,4 +1,5 @@
 import Header from "./components/header"
+import BarberShopItem from "./components/barberShop-item"
 import { Button } from "./components/ui/button"
 import { SearchIcon } from "lucide-react"
 import { Input } from "./components/ui/input"
@@ -6,8 +7,10 @@ import Image from "next/image"
 import { Card, CardContent } from "./components/ui/card"
 import { Badge } from "./components/ui/badge"
 import { Avatar, AvatarImage } from "./components/ui/avatar"
-const page = () => {
+import { db } from "./_lib/prisma"
+const page = async () => {
   //chamando banco de dados
+  const barberShops = await db.barbershop.findMany({})
   return (
     <div>
       {/* Header */}
@@ -57,6 +60,14 @@ const page = () => {
             </div>
           </CardContent>
         </Card>
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Recomendados para você
+        </h2>
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {barberShops.map((barberShop) => (
+            <BarberShopItem key={barberShop.id} barberShop={barberShop} />
+          ))}
+        </div>
       </div>
     </div>
   )
