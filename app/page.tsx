@@ -11,6 +11,11 @@ import { db } from "./_lib/prisma"
 const page = async () => {
   //chamando banco de dados
   const barberShops = await db.barbershop.findMany({})
+  const PopularBarberShops = await db.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
   return (
     <div>
       {/* Header */}
@@ -27,6 +32,50 @@ const page = async () => {
           </Button>
         </div>
 
+        {/*Busca Rápida*/}
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          <Button className="gap-2" variant="secondary">
+            <Image src="/cabelo.svg" alt="Cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+          <Button className="gap-2" variant="secondary">
+            <Image src="/barba.svg" alt="Barba" width={16} height={16} />
+            Barba
+          </Button>
+          <Button className="gap-2" variant="secondary">
+            <Image
+              src="/acabamento.svg"
+              alt="Acabamento"
+              width={16}
+              height={16}
+            />
+            Acabamento
+          </Button>
+          <Button className="gap-2" variant="secondary">
+            <Image
+              src="/sobrancelha.svg"
+              alt="Sobrancelha"
+              width={16}
+              height={16}
+            />
+            sobrancelha
+          </Button>
+          <Button className="gap-2" variant="secondary">
+            <Image
+              src="/hidratacao.svg"
+              alt="Hidratação"
+              width={16}
+              height={16}
+            />
+            Hidratação
+          </Button>
+          <Button className="gap-2" variant="secondary">
+            <Image src="/massagem.svg" alt="Massagem" width={16} height={16} />
+            massagem
+          </Button>
+        </div>
+
+        {/*Imagem*/}
         <div className="relative mt-6 h-37.5 w-full">
           <Image
             alt="Agende nos melhores com fsw barber"
@@ -68,7 +117,23 @@ const page = async () => {
             <BarberShopItem key={barberShop.id} barberShop={barberShop} />
           ))}
         </div>
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Barbearias Populares
+        </h2>
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {PopularBarberShops.map((barberShop) => (
+            <BarberShopItem key={barberShop.id} barberShop={barberShop} />
+          ))}
+        </div>
       </div>
+      <footer className="bg-muted/30 mt-8 border-t">
+        <div className="mx-auto flex h-16 max-w-md items-center justify-center px-5">
+          <p className="text-muted-foreground text-center text-sm">
+            © 2026 <span className="font-semibold">Barber-Flow</span>. Todos os
+            direitos reservados.
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }
