@@ -4,6 +4,7 @@ import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
 import Image from "next/image"
+import Link from "next/link"
 
 interface BarberShopItemProps {
   barberShop: Barbershop
@@ -18,6 +19,7 @@ const BarberShopItem = ({ barberShop }: BarberShopItemProps) => {
           <Image
             fill
             alt={barberShop.name}
+            sizes="'100vw"
             className="rounded-2xl object-cover"
             src={barberShop.imageUrl}
           />
@@ -37,7 +39,7 @@ const BarberShopItem = ({ barberShop }: BarberShopItemProps) => {
             {barberShop.description}
           </p>
           <Button variant="secondary" className="mt-3 w-full">
-            Reservar
+            <Link href={`/barbershops/${barberShop.id}`}>Reservar</Link>
           </Button>
         </div>
       </CardContent>
