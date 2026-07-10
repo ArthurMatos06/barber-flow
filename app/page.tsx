@@ -45,7 +45,6 @@ const page = async () => {
             </Button>
           ))}
         </div>
-
         {/*Imagem*/}
         <div className="relative mt-6 h-37.5 w-full">
           <Image

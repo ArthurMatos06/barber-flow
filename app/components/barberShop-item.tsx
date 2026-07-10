@@ -38,9 +38,11 @@ const BarberShopItem = ({ barberShop }: BarberShopItemProps) => {
           <p className="truncate text-sm text-gray-400">
             {barberShop.description}
           </p>
-          <Button variant="secondary" className="mt-3 w-full">
-            <Link href={`/barbershops/${barberShop.id}`}>Reservar</Link>
-          </Button>
+          <Link href={`/barbershops/${barberShop.id}`} className="mt-3 block">
+            <Button variant="secondary" className="w-full">
+              Reservar
+            </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>
