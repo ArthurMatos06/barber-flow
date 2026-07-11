@@ -1,4 +1,5 @@
 import { db } from "@/app/_lib/prisma"
+import ServiceItem from "@/app/components/service-item"
 import { Button } from "@/app/components/ui/button"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
@@ -18,6 +19,9 @@ export default async function BarbershopPage({ params }: Props) {
     where: {
       id,
     },
+    include: {
+      services: true,
+    },
   })
 
   // Evita os erros de null
@@ -27,7 +31,7 @@ export default async function BarbershopPage({ params }: Props) {
 
   return (
     <div>
-      {/* Imagem */}
+      {/* Imagem e icones dentro dela*/}
       <div className="relative h-62.5 w-full">
         <Image
           alt={barbershop.name}
@@ -54,6 +58,7 @@ export default async function BarbershopPage({ params }: Props) {
           <MenuIcon />
         </Button>
       </div>
+      {/* nome e avaliações */}
       <div className="border-b border-solid p-5">
         <h1 className="mb-6 text-xl font-bold">{barbershop.name}</h1>
         <div className="mb-3 flex items-center gap-1">
@@ -69,6 +74,18 @@ export default async function BarbershopPage({ params }: Props) {
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="text-xs font-bold text-gray-400 uppercase">Sobre nós</h2>
         <p className="text-justify text-sm">{barbershop?.description}</p>
+      </div>
+
+      {/* servicos */}
+      <div className="space-y-3 p-5">
+        <h2 className="mb-2 text-xs font-bold text-gray-400 uppercase">
+          Servicos
+        </h2>
+        <div className="space-y-3">
+          {barbershop.services.map((service) => (
+            <ServiceItem key={service.id} service={service} />
+          ))}
+        </div>
       </div>
     </div>
   )
