@@ -1,7 +1,7 @@
 import { db } from "@/app/_lib/prisma"
 import PhoneItem from "@/app/components/phone-item"
 import ServiceItem from "@/app/components/service-item"
-import SideBar from "@/app/components/sidebar-Sheet"
+import SideBar from "@/app/components/SideBar"
 import { Button } from "@/app/components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/components/ui/sheet"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
