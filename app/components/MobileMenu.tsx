@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog"
+import Image from "next/image"
 // dps aceitar um variant e um size como props no botao
 type MobileMenuProps = {
   variant?: "default" | "secondary" | "outline"
@@ -35,13 +36,23 @@ const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
         />
       </Sheet>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent className="text-center">
           <DialogHeader>
             <DialogTitle>Faça login na plataforma</DialogTitle>
             <DialogDescription>
               Conecte-se usando sua conta do Google.
             </DialogDescription>
           </DialogHeader>
+
+          <Button className="gap-1 font-bold" variant="outline">
+            <Image
+              src="/google.svg"
+              alt="Fazer login com o google"
+              width={18}
+              height={18}
+            />
+            Google
+          </Button>
         </DialogContent>
       </Dialog>
     </>
