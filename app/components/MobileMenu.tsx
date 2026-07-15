@@ -12,22 +12,27 @@ import {
   DialogTitle,
 } from "./ui/dialog"
 import Image from "next/image"
+import { signIn } from "next-auth/react"
 // dps aceitar um variant e um size como props no botao
 type MobileMenuProps = {
   variant?: "default" | "secondary" | "outline"
   className?: string
 }
 const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
+  const handleLoginWithGoogleClick = () => signIn("google")
+
   const [sheetOpen, setSheetOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   return (
     <>
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger>
-          <Button size="icon" variant={variant} className={className}>
-            <MenuIcon />
-          </Button>
-        </SheetTrigger>
+        <SheetTrigger
+          render={
+            <Button size="icon" variant={variant} className={className}>
+              <MenuIcon />
+            </Button>
+          }
+        ></SheetTrigger>
         <Sidebar
           onLogin={() => {
             setSheetOpen(false)
@@ -44,7 +49,11 @@ const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
             </DialogDescription>
           </DialogHeader>
 
-          <Button className="gap-1 font-bold" variant="outline">
+          <Button
+            className="gap-1 font-bold"
+            variant="outline"
+            onClick={handleLoginWithGoogleClick}
+          >
             <Image
               src="/google.svg"
               alt="Fazer login com o google"
