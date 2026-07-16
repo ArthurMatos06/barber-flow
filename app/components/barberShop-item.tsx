@@ -11,9 +11,9 @@ interface BarberShopItemProps {
 }
 
 const BarberShopItem = ({ barberShop }: BarberShopItemProps) => {
+  //dps colocar um props class name para poder resolver o problema de size na pagina barbershops
   return (
-    // min-w-41.75
-    <Card className="w-full rounded-2xl">
+    <Card className="w-full min-w-41.75 rounded-2xl">
       <CardContent className="p-0 px-1 pt-1">
         {/* {imagem} */}
         <div className="relative h-39.75 w-full">

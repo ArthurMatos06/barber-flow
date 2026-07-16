@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { BarbershopService } from "../generated/prisma/client"
-import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
+import ReserveBarber from "./reserveService"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -38,9 +38,7 @@ export default function ServiceItem({ service }: ServiceItemProps) {
               }).format(Number(service.price))}
             </p>
 
-            <Button variant="secondary" size="sm">
-              Reservar
-            </Button>
+            <ReserveBarber variant="outline" />
           </div>
         </div>
       </CardContent>
