@@ -6,6 +6,7 @@ import { db } from "./_lib/prisma"
 import { quickSearchOptions } from "./constants/search"
 import BookingItem from "./components/booking-item"
 import Search from "./components/search"
+import Link from "next/link"
 const page = async () => {
   //chamando banco de dados
   const barberShops = await db.barbershop.findMany({})
@@ -30,15 +31,22 @@ const page = async () => {
         {/*Busca Rápida*/}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
-            <Button key={option.label} className="gap-2" variant="secondary">
-              <Image
-                src={option.imageUrl}
-                alt={option.label}
-                width={16}
-                height={16}
-              />
-              {option.label}
-            </Button>
+            <Button
+              key={option.label}
+              className="gap-2"
+              variant="secondary"
+              render={
+                <Link href={`/barbershops?service=${option.label}`}>
+                  <Image
+                    src={option.imageUrl}
+                    alt={option.label}
+                    width={16}
+                    height={16}
+                  />
+                  {option.label}
+                </Link>
+              }
+            ></Button>
           ))}
         </div>
         {/*Imagem*/}

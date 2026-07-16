@@ -12,19 +12,16 @@ const Search = () => {
   const router = useRouter()
 
   const formSchema = z.object({
-    search: z
-      .string()
-      .trim()
-      .min(3, "A busca deve ter pelo menos 3 caracteres"),
+    title: z.string().trim().min(3, "A busca deve ter pelo menos 3 caracteres"),
   })
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const search = formData.get("search")
+    const title = formData.get("title")
 
     const result = formSchema.safeParse({
-      search,
+      title,
     })
 
     if (!result.success) {
@@ -34,13 +31,13 @@ const Search = () => {
 
     setError("")
 
-    router.push(`/barbershops?search=${result.data.search}`)
+    router.push(`/barbershops?title=${result.data.title}`) //perguntar para ao char pq o routerReact é melghor que o link aqui
   }
   return (
     <>
       <form onSubmit={handleSubmit} className="flex items-start gap-2">
         <div className="flex-1">
-          <Input name="search" placeholder="Faça sua busca..." />
+          <Input name="title" placeholder="Faça sua busca..." />
 
           {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
         </div>
