@@ -7,8 +7,13 @@ import { quickSearchOptions } from "./constants/search"
 import BookingItem from "./components/booking-item"
 import Search from "./components/search"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./api/auth/[...nextauth]/route"
+import { format } from "date-fns/format"
+import { ptBR } from "date-fns/locale/pt-BR"
 const page = async () => {
   //chamando banco de dados
+  const session = await getServerSession(authOptions)
   const barberShops = await db.barbershop.findMany({})
   const PopularBarberShops = await db.barbershop.findMany({
     orderBy: {
@@ -21,8 +26,18 @@ const page = async () => {
 
       <Header />
       <div className="p-5">
-        <h2 className="text-xl font-bold">OLÁ, USUARIO</h2>
-        <p>domingo, 07 de julho.</p>
+        {session?.user ? (
+          <>
+            <h2 className="text-xl font-bold">Olá {session.user.name}</h2>
+            <p>
+              {format(new Date(), "EEEE, dd 'de' MMMM", {
+                locale: ptBR,
+              })}
+            </p>
+          </>
+        ) : (
+          ""
+        )}
 
         <div className="mt-6">
           <Search />
@@ -48,8 +63,8 @@ const page = async () => {
               }
             ></Button>
           ))}
+          {/*Imagem*/}
         </div>
-        {/*Imagem*/}
         <div className="relative mt-6 h-37.5 w-full">
           <Image
             alt="Agende nos melhores com fsw barber"

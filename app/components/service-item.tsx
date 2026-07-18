@@ -1,12 +1,13 @@
 import Image from "next/image"
-import { BarbershopService } from "../generated/prisma/client"
+import { Barbershop, BarbershopService } from "../generated/prisma/client"
 import { Card, CardContent } from "./ui/card"
 import ReserveBarber from "./reserveService"
 
 interface ServiceItemProps {
   service: BarbershopService
+  barbershop: Pick<Barbershop, "name">
 }
-export default function ServiceItem({ service }: ServiceItemProps) {
+export default function ServiceItem({ service, barbershop }: ServiceItemProps) {
   return (
     <Card>
       <CardContent className="flex items-center gap-3 p-3">
@@ -38,7 +39,11 @@ export default function ServiceItem({ service }: ServiceItemProps) {
               }).format(Number(service.price))}
             </p>
 
-            <ReserveBarber variant="outline" />
+            <ReserveBarber
+              variant="outline"
+              service={service}
+              barbershop={barbershop}
+            />
           </div>
         </div>
       </CardContent>

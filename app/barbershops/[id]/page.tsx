@@ -79,7 +79,13 @@ export default async function BarbershopPage({ params }: Props) {
         </h2>
         <div className="space-y-3">
           {barbershop.services.map((service) => (
-            <ServiceItem key={service.id} service={service} />
+            <ServiceItem
+              key={service.id}
+              service={service}
+              barbershop={{
+                name: barbershop.name,
+              }}
+            />
           ))}
         </div>
       </div>
