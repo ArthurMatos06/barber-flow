@@ -84,7 +84,7 @@ const Sidebar = ({ onLogin }: SidebarProps) => {
         ))}
       </div>
 
-      {data?.user ? (
+      {data?.user && (
         <div className="mt-6 flex flex-col gap-3 border-b pb-6">
           <Button
             variant="ghost"
@@ -95,8 +95,6 @@ const Sidebar = ({ onLogin }: SidebarProps) => {
             Sair da conta
           </Button>
         </div>
-      ) : (
-        ""
       )}
     </SheetContent>
   )

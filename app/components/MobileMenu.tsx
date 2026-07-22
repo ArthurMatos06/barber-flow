@@ -4,23 +4,14 @@ import { Sheet, SheetTrigger } from "./ui/sheet"
 import Sidebar from "./SideBar"
 import { MenuIcon } from "lucide-react"
 import { Button } from "./ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog"
-import Image from "next/image"
-import { signIn } from "next-auth/react"
+import { Dialog } from "./ui/dialog"
+import SignInDialog from "../components/sign-in-dialog"
 // dps aceitar um variant e um size como props no botao
 type MobileMenuProps = {
   variant?: "default" | "secondary" | "outline"
   className?: string
 }
 const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
-  const handleLoginWithGoogleClick = () => signIn("google")
-
   const [sheetOpen, setSheetOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   return (
@@ -41,28 +32,7 @@ const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
         />
       </Sheet>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="text-center">
-          <DialogHeader>
-            <DialogTitle>Faça login na plataforma</DialogTitle>
-            <DialogDescription>
-              Conecte-se usando sua conta do Google.
-            </DialogDescription>
-          </DialogHeader>
-
-          <Button
-            className="gap-1 font-bold"
-            variant="outline"
-            onClick={handleLoginWithGoogleClick}
-          >
-            <Image
-              src="/google.svg"
-              alt="Fazer login com o google"
-              width={18}
-              height={18}
-            />
-            Google
-          </Button>
-        </DialogContent>
+        <SignInDialog />
       </Dialog>
     </>
   )
