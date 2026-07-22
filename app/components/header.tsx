@@ -2,6 +2,7 @@ import Image from "next/image"
 import { Card, CardContent } from "./ui/card"
 import MobileMenu from "./MobileMenu"
 import Link from "next/link"
+//botao é height={18} width={120}
 export default function Header() {
   return (
     <>

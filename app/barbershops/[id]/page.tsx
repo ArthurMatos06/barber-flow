@@ -26,10 +26,14 @@ export default async function BarbershopPage({ params }: Props) {
     },
   })
 
-  // Evita os erros de null
   if (!barbershop) {
     return notFound()
   }
+
+  const services = barbershop.services.map((service) => ({
+    ...service,
+    price: Number(service.price),
+  }))
 
   return (
     <div>
@@ -78,13 +82,11 @@ export default async function BarbershopPage({ params }: Props) {
           Servicos
         </h2>
         <div className="space-y-3">
-          {barbershop.services.map((service) => (
+          {services.map((service) => (
             <ServiceItem
               key={service.id}
               service={service}
-              barbershop={{
-                name: barbershop.name,
-              }}
+              barbershop={barbershop}
             />
           ))}
         </div>

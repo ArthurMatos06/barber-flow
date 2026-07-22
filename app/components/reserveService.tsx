@@ -4,24 +4,31 @@ import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "./ui/sheet"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent } from "./ui/card"
-import { Barbershop, BarbershopService } from "../generated/prisma/client"
-import { format, set } from "date-fns"
+import { Barbershop, Booking } from "../generated/prisma/client"
+import { addDays, format, set } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
+import { getBookings } from "../_actions/get-bookings"
+interface ServiceProps {
+  id: string
+  name: string
+  description: string
+  imageUrl: string
+  price: number
+  barbershopId: string
+}
 
 interface ReserveBarberProps {
   variant?: "default" | "secondary" | "outline"
-  service: BarbershopService
+  service: ServiceProps
   barbershop: Pick<Barbershop, "name">
 }
 
@@ -49,6 +56,24 @@ const TIME_LIST = [
   "18:00",
 ]
 
+const getTimeList = (bookings: Booking[]) => {
+  const timeList = TIME_LIST.filter((time) => {
+    const Hour = Number(time.split(":")[0])
+    const Minutes = Number(time.split(":")[1])
+
+    const hasBookingOnCurrentTime = bookings.some(
+      (booking) =>
+        booking.date.getHours() === Hour &&
+        booking.date.getMinutes() === Minutes,
+    )
+    if (hasBookingOnCurrentTime) {
+      return false
+    }
+    return true
+  })
+  return timeList
+}
+
 const ReserveBarber = ({
   variant,
   service,
@@ -59,7 +84,32 @@ const ReserveBarber = ({
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
+  const [dayBookings, SetdayBookings] = useState<Booking[]>([])
+  const [bookingSheetIsOpen, setbookingSheetIsOpen] = useState(false)
+  const [isLoadingBookings, setIsLoadingBookings] = useState(false)
+  useEffect(() => {
+    const fetch = async () => {
+      if (!selectedDay) return
+      setIsLoadingBookings(true)
+      try {
+        const bookings = await getBookings({
+          date: selectedDay,
+          serviceId: service.id,
+        })
+        SetdayBookings(bookings)
+      } finally {
+        setIsLoadingBookings(false)
+      }
+    }
+    fetch()
+  }, [selectedDay, service.id])
 
+  const handleBookingSheetOpenChange = () => {
+    setSelectedDay(undefined)
+    setSelectedTime(undefined)
+    SetdayBookings([])
+    setbookingSheetIsOpen(false)
+  }
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDay(date)
   }
@@ -82,22 +132,27 @@ const ReserveBarber = ({
         userId: data?.user.id,
         date: newDate,
       })
+      setbookingSheetIsOpen(false)
       toast.success("Reserva criado com sucesso!")
     } catch (error) {
       console.error(error)
-      toast.error("Erro ao crair reserva")
+      toast.error("Erro ao criar reserva")
     }
   }
 
   return (
-    <Sheet>
-      <SheetTrigger
-        render={
-          <Button variant={variant} size="sm">
-            Reservar
-          </Button>
-        }
-      ></SheetTrigger>
+    <Sheet
+      open={bookingSheetIsOpen}
+      onOpenChange={handleBookingSheetOpenChange}
+    >
+      <Button
+        variant={variant}
+        size="sm"
+        onClick={() => setbookingSheetIsOpen(true)}
+      >
+        Reservar
+      </Button>
+
       <SheetContent className="px-0">
         <SheetHeader>
           <SheetTitle className="text-center">Fazer Reservas</SheetTitle>
@@ -108,6 +163,7 @@ const ReserveBarber = ({
             mode="single"
             selected={selectedDay}
             onSelect={handleDateSelect}
+            disabled={{ before: addDays(new Date(), 1) }}
             locale={ptBR}
             classNames={{
               weekday: "w-full text-center capitalize",
@@ -121,19 +177,22 @@ const ReserveBarber = ({
         </div>
         {selectedDay && (
           <div className="flex w-full gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-            {TIME_LIST.map((time) => (
-              <Button
-                key={time}
-                className="shrink-0 rounded-full"
-                variant={selectedTime === time ? "default" : "outline"}
-                onClick={() => handleTimeSelect(time)}
-              >
-                {time}
-              </Button>
-            ))}
+            {isLoadingBookings ? (
+              <p className="text-sm text-gray-400">Carregando horários...</p>
+            ) : (
+              getTimeList(dayBookings).map((time) => (
+                <Button
+                  key={time}
+                  className="shrink-0 rounded-full"
+                  variant={selectedTime === time ? "default" : "outline"}
+                  onClick={() => handleTimeSelect(time)}
+                >
+                  {time}
+                </Button>
+              ))
+            )}
           </div>
         )}
-
         {selectedTime && selectedDay && (
           <div className="p-5">
             <Card>
@@ -166,13 +225,9 @@ const ReserveBarber = ({
               </CardContent>
             </Card>
             <SheetFooter className="px-5">
-              <SheetClose
-                render={
-                  <Button type="submit" onClick={handleCreateBooking}>
-                    confirmar
-                  </Button>
-                }
-              ></SheetClose>
+              <Button type="submit" onClick={handleCreateBooking}>
+                confirmar
+              </Button>
             </SheetFooter>
           </div>
         )}

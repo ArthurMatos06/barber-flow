@@ -28,7 +28,7 @@ const MobileMenu = ({ variant = "outline", className }: MobileMenuProps) => {
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger
           render={
-            <Button size="icon" variant={variant} className={className}>
+            <Button size="icon-lg" variant={variant} className={className}>
               <MenuIcon />
             </Button>
           }
