@@ -1,18 +1,31 @@
 import Image from "next/image"
-import { Barbershop, BarbershopService } from "../generated/prisma/client"
+import { Barbershop } from "../generated/prisma/client"
 import { Card, CardContent } from "./ui/card"
 import ReserveBarber from "./reserveService"
 
-interface ServiceItemProps {
-  service: BarbershopService
+interface ServiceProps {
+  id: string
+  name: string
+  description: string
+  imageUrl: string
+  price: number
+  barbershopId: string
+}
+
+interface ReserveBarberProps {
+  variant?: "default" | "secondary" | "outline"
+  service: ServiceProps
   barbershop: Pick<Barbershop, "name">
 }
-export default function ServiceItem({ service, barbershop }: ServiceItemProps) {
+export default function ServiceItem({
+  service,
+  barbershop,
+}: ReserveBarberProps) {
   return (
     <Card>
       <CardContent className="flex items-center gap-3 p-3">
         {/* Imagem */}
-        <div className="relative h-[110px] w-[110px] shrink-0 overflow-hidden rounded-xl">
+        <div className="relative h-27.5 w-27.5 shrink-0 overflow-hidden rounded-xl">
           <Image
             src={service.imageUrl}
             alt={service.name}

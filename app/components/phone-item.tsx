@@ -6,12 +6,12 @@ import { toast } from "sonner"
 interface PhoneItemProps {
   phone: string
 }
-
 const PhoneItem = ({ phone }: PhoneItemProps) => {
   const handleCopyPhoneClick = (phone: string) => {
     navigator.clipboard.writeText(phone)
     toast.success("Tefone copiado com sucesso")
   }
+
   return (
     <div key={phone} className="flex justify-between">
       {/* esquerda */}
