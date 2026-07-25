@@ -110,6 +110,6 @@
     @apply h-full;
   }
   body {
-    @apply h-full bg-background text-foreground;
+    @apply bg-background text-foreground h-full;
   }
 }

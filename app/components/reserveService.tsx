@@ -126,19 +126,18 @@ const ReserveBarber = ({
 
       const hour = Number(selectedTime.split(":")[0])
       const minute = Number(selectedTime.split(":")[1])
+
       const newDate = set(selectedDay, {
         minutes: minute,
         hours: hour,
       })
       createBooking({
         serviceId: service.id,
-        userId: data?.user.id,
         date: newDate,
       })
       setbookingSheetIsOpen(false)
       toast.success("Reserva criado com sucesso!")
-    } catch (error) {
-      console.error(error)
+    } catch {
       toast.error("Erro ao criar reserva")
     }
   }
