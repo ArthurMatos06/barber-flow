@@ -35,7 +35,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   if (date < new Date()) {
     throw new Error("Não é possível agendar em uma data passada")
   }
-  // TODO: Implementar login com Google
+  // TODO: validar por horarios tbm
 
   try {
     await db.booking.create({
