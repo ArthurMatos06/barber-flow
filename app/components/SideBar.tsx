@@ -7,7 +7,7 @@ import { quickSearchOptions } from "../_constants/quickSearch"
 import Image from "next/image"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
-
+//TODO: somente usuarios logados poderao ver os Agendamentos
 type SidebarProps = {
   onLogin: () => void
 }
@@ -52,11 +52,16 @@ const Sidebar = ({ onLogin }: SidebarProps) => {
             </Button>
           }
         ></SheetClose>
-
-        <Button variant="ghost" className="justify-start gap-2">
-          <CalendarIcon size={18} />
-          Agendamentos
-        </Button>
+        <SheetClose
+          render={
+            <Button className="justify-start gap-2" variant="ghost">
+              <Link href="/bookings" className="flex w-full items-center gap-2">
+                <CalendarIcon size={18} />
+                Agendamentos
+              </Link>
+            </Button>
+          }
+        ></SheetClose>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 border-b pb-6">

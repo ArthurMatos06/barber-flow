@@ -8,9 +8,10 @@ import BookingItem from "./components/booking-item"
 import Search from "./components/search"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
-import { authOptions } from "./api/auth/[...nextauth]/route"
 import { format } from "date-fns/format"
 import { ptBR } from "date-fns/locale/pt-BR"
+import { authOptions } from "./_lib/auth"
+
 const page = async () => {
   //chamando banco de dados
   const session = await getServerSession(authOptions)
@@ -20,6 +21,26 @@ const page = async () => {
       name: "desc",
     },
   })
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: session?.user.id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+      })
+    : []
   return (
     <div>
       {/* Header */}
@@ -74,7 +95,15 @@ const page = async () => {
           />
         </div>
         {/*Agendamento*/}
-        <BookingItem />
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((booking) => (
+            <BookingItem key={booking.id} booking={booking} />
+          ))}
+        </div>
+
         <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
           Recomendados para você
         </h2>
