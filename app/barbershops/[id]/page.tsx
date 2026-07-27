@@ -75,7 +75,6 @@ export default async function BarbershopPage({ params }: Props) {
         <h2 className="text-xs font-bold text-gray-400 uppercase">Sobre nós</h2>
         <p className="text-justify text-sm">{barbershop?.description}</p>
       </div>
-
       {/* servicos */}
       <div className="space-y-3 p-5">
         <h2 className="mb-2 text-xs font-bold text-gray-400 uppercase">
