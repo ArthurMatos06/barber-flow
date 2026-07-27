@@ -37,7 +37,11 @@ const Search = () => {
     <>
       <form onSubmit={handleSubmit} className="flex items-start gap-2">
         <div className="flex-1">
-          <Input name="title" placeholder="Faça sua busca..." />
+          <Input
+            name="title"
+            placeholder="Faça sua busca..."
+            className="focus:border-input focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none"
+          />
 
           {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
         </div>
