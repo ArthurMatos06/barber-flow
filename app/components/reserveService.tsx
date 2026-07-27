@@ -9,10 +9,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent } from "./ui/card"
 import { Barbershop, Booking } from "../generated/prisma/client"
-import { format, set } from "date-fns"
+import { format, isPast, isToday, set } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
@@ -58,11 +58,22 @@ const TIME_LIST = [
   "18:00",
 ]
 
-const getTimeList = (bookings: Booking[]) => {
+interface getTimeListProps {
+  bookings: Booking[]
+  selectedDay: Date
+}
+
+const getTimeList = ({ bookings, selectedDay }: getTimeListProps) => {
   const timeList = TIME_LIST.filter((time) => {
     const Hour = Number(time.split(":")[0])
     const Minutes = Number(time.split(":")[1])
 
+    const timeIsOnThePast = isPast(
+      set(new Date(), { hours: Hour, minutes: Minutes }),
+    )
+    if (timeIsOnThePast && isToday(selectedDay)) {
+      return false
+    }
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
         booking.date.getHours() === Hour &&
@@ -149,6 +160,14 @@ const ReserveBarber = ({
     return setSignInDialogIsOpen(true)
   }
 
+  const timeList = useMemo(() => {
+    if (!selectedDay) return []
+    return getTimeList({
+      bookings: dayBookings,
+      selectedDay,
+    })
+  }, [dayBookings, selectedDay])
+
   return (
     <>
       <Sheet
@@ -189,8 +208,8 @@ const ReserveBarber = ({
             <div className="flex w-full gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
               {isLoadingBookings ? (
                 <p className="text-sm text-gray-400">Carregando horários...</p>
-              ) : (
-                getTimeList(dayBookings).map((time) => (
+              ) : timeList.length > 0 ? (
+                timeList.map((time) => (
                   <Button
                     key={time}
                     className="shrink-0 rounded-full"
@@ -200,6 +219,10 @@ const ReserveBarber = ({
                     {time}
                   </Button>
                 ))
+              ) : (
+                <p className="text-xs text-gray-400">
+                  Não há horários disponíveis para este dia
+                </p>
               )}
             </div>
           )}
