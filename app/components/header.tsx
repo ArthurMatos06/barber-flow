@@ -36,10 +36,6 @@ import SignInDialog from "./sign-in-dialog"
 import { Badge } from "./ui/badge"
 import z from "zod"
 
-const navLinks = [
-  { title: "Início", href: "/" },
-  { title: "Agendamentos", href: "/bookings" },
-]
 //FIXME: arrumar agendamentos link desktop
 export default function Header() {
   const { data } = useSession()
@@ -89,22 +85,20 @@ export default function Header() {
           {/* //FIXME: desktop: quando nao logado nao mostrar agendamentos  */}
           {/* Navegação — só links, com estado ativo */}
           <nav className="hidden shrink-0 items-center gap-7 md:flex">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href
-              return (
-                <Link
-                  key={link.title}
-                  href={link.href}
-                  className={`pb-1 text-xl font-medium transition-colors ${
-                    isActive
-                      ? "border-primary text-primary border-b-2"
-                      : "border-b-2 border-transparent text-gray-300 hover:text-white"
-                  }`}
-                >
-                  {link.title}
-                </Link>
-              )
-            })}
+            <Link
+              href="/"
+              className={`pb-1 text-xl font-medium transition-colors ${pathname === "/" ? "border-primary text-primary border-b-2" : "border-b-2 border-transparent text-gray-300 hover:text-white"}`}
+            >
+              Início
+            </Link>
+            {data?.user && (
+              <Link
+                href="/bookings"
+                className={`pb-1 text-xl font-medium transition-colors ${pathname === "/bookings" ? "border-primary text-primary border-b-2" : "border-b-2 border-transparent text-gray-300 hover:text-white"}`}
+              >
+                Agendamentos
+              </Link>
+            )}
           </nav>
 
           {/* Espaço flexível empurra busca + conta pra direita */}
