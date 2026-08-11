@@ -110,7 +110,7 @@ const BookingItem = ({ booking }: BookingProps) => {
               Informações da Reserva
             </SheetTitle>
           </SheetHeader>
-          <div className="relative mt-6 flex h-[180px] w-full items-end">
+          <div className="relative mt-6 flex h-45 w-full items-end">
             <Image
               alt={`Mapa da barbearia ${barbershop.name}`}
               src="/map.png"
