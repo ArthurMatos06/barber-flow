@@ -20,7 +20,11 @@ const PhoneItem = ({ phone }: PhoneItemProps) => {
         <p className="text-sm">{phone}</p>
       </div>
       {/* direita */}
-      <Button variant="outline" onClick={() => handleCopyPhoneClick(phone)}>
+      <Button
+        variant="outline"
+        onClick={() => handleCopyPhoneClick(phone)}
+        className="hover:cursor-pointer"
+      >
         copiar
       </Button>
     </div>

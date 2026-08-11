@@ -70,7 +70,7 @@ export default function Header() {
   return (
     <>
       <Card className="rounded-none border-x-0 border-t-0">
-        <CardContent className="flex flex-row items-center gap-10 p-5 md:px-12 md:py-5">
+        <CardContent className="flex flex-row items-center gap-10 p-5 md:px-12 md:py-2">
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <Image
@@ -114,7 +114,10 @@ export default function Header() {
                 {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
               </div>
 
-              <Button type="submit" className="h-12 w-10 px-6 py-4">
+              <Button
+                type="submit"
+                className="h-12 w-10 px-6 py-4 hover:cursor-pointer"
+              >
                 <SearchIcon width={24} height={24} />
               </Button>
             </form>
@@ -133,14 +136,17 @@ export default function Header() {
                   <button
                     onClick={() => signOut()}
                     title="Sair da conta"
-                    className="hover:text-primary text-gray-300 transition-colors"
+                    className="hover:text-primary text-gray-300 transition-colors hover:cursor-pointer"
                   >
                     <LogOutIcon size={20} />
                   </button>
                 </Badge>
               </div>
             ) : (
-              <Button onClick={() => setDialogOpen(true)} className="shrink-0">
+              <Button
+                onClick={() => setDialogOpen(true)}
+                className="shrink-0 hover:cursor-pointer"
+              >
                 Fazer login
               </Button>
             )}
