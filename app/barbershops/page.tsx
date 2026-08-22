@@ -2,8 +2,6 @@ import { db } from "../_lib/prisma"
 import BarberShopItem from "../components/barberShop-item"
 import Header from "../components/header"
 import Search from "../components/search"
-import ShowOnDesktop from "../components/ShowOnDesktop"
-import ShowOnMobile from "../components/ShowOnMobile"
 //FIXME: arruamar pq quando eu mudo manualmente o parameto service ele nao aplica o grid cols desktrop
 interface BarberShopsPageProps {
   searchParams: Promise<{
@@ -50,20 +48,11 @@ const BarberShopsPage = async ({ searchParams }: BarberShopsPageProps) => {
         <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
           Resultados para &quot;{params?.service || params?.title}&quot;
         </h2>
-        <ShowOnDesktop>
-          <div className="grid grid-cols-5 gap-4">
-            {barbershops.map((barberShop) => (
-              <BarberShopItem key={barberShop.id} barberShop={barberShop} />
-            ))}
-          </div>
-        </ShowOnDesktop>
-        <ShowOnMobile>
-          <div className="grid grid-cols-2 gap-4">
-            {barbershops.map((barberShop) => (
-              <BarberShopItem key={barberShop.id} barberShop={barberShop} />
-            ))}
-          </div>
-        </ShowOnMobile>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+          {barbershops.map((barberShop) => (
+            <BarberShopItem key={barberShop.id} barberShop={barberShop} />
+          ))}
+        </div>
       </div>
     </div>
   )

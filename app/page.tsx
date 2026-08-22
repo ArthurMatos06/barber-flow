@@ -11,8 +11,6 @@ import { getServerSession } from "next-auth"
 import { format } from "date-fns/format"
 import { ptBR } from "date-fns/locale/pt-BR"
 import { authOptions } from "./_lib/auth"
-import ShowOnMobile from "./components/ShowOnMobile"
-import ShowOnDesktop from "./components/ShowOnDesktop"
 
 const page = async () => {
   //chamando banco de dados
@@ -63,12 +61,10 @@ const page = async () => {
             })}
           </p>
         </>
-        {/* Busca */}
-        <ShowOnMobile>
-          <div className="mt-6">
-            <Search />
-          </div>
-        </ShowOnMobile>
+        {/* Busca — só mobile */}
+        <div className="mt-6 lg:hidden">
+          <Search />
+        </div>
         {/*Busca Rápida*/}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
@@ -90,27 +86,24 @@ const page = async () => {
             ></Button>
           ))}
         </div>
-        {/*Banner*/}
-        <ShowOnMobile>
-          <div className="relative mt-6 h-37.5 w-full">
-            <Image
-              alt="Agende nos melhores com fsw barber"
-              src="/banner-01.png"
-              fill
-              className="rounded-xl object-cover"
-            />
-          </div>
-        </ShowOnMobile>
-        <ShowOnDesktop>
-          <div className="relative mt-6 aspect-1936/544 w-full">
-            <Image
-              alt="Agende nos melhores com fsw barber"
-              src="/deskbanner.png"
-              fill
-              className="rounded-xl object-cover"
-            />
-          </div>
-        </ShowOnDesktop>
+        {/* Banner mobile */}
+        <div className="relative mt-6 h-37.5 w-full lg:hidden">
+          <Image
+            alt="Agende nos melhores com fsw barber"
+            src="/banner-01.png"
+            fill
+            className="rounded-xl object-cover"
+          />
+        </div>
+        {/* Banner desktop */}
+        <div className="relative mt-6 hidden aspect-1936/544 w-full lg:block">
+          <Image
+            alt="Agende nos melhores com fsw barber"
+            src="/deskbanner.png"
+            fill
+            className="rounded-xl object-cover"
+          />
+        </div>
         {/*Agendamento*/}
         {session?.user && (
           <>
@@ -124,20 +117,19 @@ const page = async () => {
             <BookingItem key={booking.id} booking={booking} />
           ))}
         </div>
-        {/*Recomendados*/}
-        <ShowOnMobile>
-          <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
-            Recomendados para você
-          </h2>
-        </ShowOnMobile>
-        <ShowOnDesktop>
+        {/* Recomendados — título mobile */}
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase lg:hidden">
+          Recomendados para você
+        </h2>
+        {/* Recomendados — título desktop */}
+        <div className="hidden lg:block">
           <p className="text-primary mt-10 text-sm font-semibold uppercase">
             destaques
           </p>
           <h1 className="mt-1 mb-3 text-2xl font-bold text-white uppercase">
             Recomendados para você
           </h1>
-        </ShowOnDesktop>
+        </div>
 
         <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
           {barberShops.map((barberShop) => (

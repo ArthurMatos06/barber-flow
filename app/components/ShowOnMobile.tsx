@@ -1,13 +1,5 @@
-"use client"
+const ShowOnMobile = ({ children }: { children: React.ReactNode }) => (
+  <div className="lg:hidden">{children}</div>
+)
 
-import { useIsDesktop } from "@/app/hooks/useIsDesktop"
-
-export default function ShowOnMobile({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const isDesktop = useIsDesktop()
-  if (isDesktop) return null
-  return <>{children}</>
-}
+export default ShowOnMobile
