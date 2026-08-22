@@ -71,9 +71,11 @@ const getTimeList = ({ bookings, selectedDay }: getTimeListProps) => {
     const timeIsOnThePast = isPast(
       set(new Date(), { hours: Hour, minutes: Minutes }),
     )
+    //se o tempo estiver no passado e ele for HOJE ele esconde.
     if (timeIsOnThePast && isToday(selectedDay)) {
       return false
     }
+    //se o horario já foi reservado.
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
         booking.date.getHours() === Hour &&
@@ -101,21 +103,28 @@ const ReserveBarber = ({
   const [dayBookings, SetdayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setbookingSheetIsOpen] = useState(false)
   const [isLoadingBookings, setIsLoadingBookings] = useState(false)
-  useEffect(() => {
-    const fetch = async () => {
-      if (!selectedDay) return
-      setIsLoadingBookings(true)
-      try {
-        const bookings = await getBookings({
-          date: selectedDay,
-          serviceId: service.id,
-        })
-        SetdayBookings(bookings)
-      } finally {
-        setIsLoadingBookings(false)
-      }
+
+  // Extraída pra fora do useEffect: assim conseguimos chamar essa mesma
+  // busca de novo manualmente depois de criar uma reserva, sem depender
+  // de selectedDay/service.id mudarem (o que só acontece trocando de dia).
+  const fetchDayBookings = async (day: Date) => {
+    setIsLoadingBookings(true)
+    try {
+      const bookings = await getBookings({
+        date: day,
+        serviceId: service.id,
+      })
+      SetdayBookings(bookings)
+    } finally {
+      setIsLoadingBookings(false)
     }
-    fetch()
+  }
+
+  useEffect(() => {
+    if (!selectedDay) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- padrão legítimo: setIsLoadingBookings(true) roda antes do await dentro de fetchDayBookings, pra mostrar o estado de carregamento
+    fetchDayBookings(selectedDay)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDay, service.id])
 
   const handleBookingSheetOpenChange = () => {
@@ -142,14 +151,29 @@ const ReserveBarber = ({
         minutes: minute,
         hours: hour,
       })
-      createBooking({
+
+      // Aguardamos a Server Action terminar antes de seguir. Sem esse
+      // await, o código continuava (fechando o sheet e mostrando "sucesso")
+      // mesmo que a criação da reserva ainda estivesse em andamento ou
+      // tivesse falhado no servidor — e o catch abaixo nunca era acionado.
+      await createBooking({
         serviceId: service.id,
         date: newDate,
       })
+
+      // Rebusca os horários ocupados do dia selecionado, agora que
+      // acabamos de criar uma nova reserva. Sem isso, o horário que
+      // acabamos de reservar continuava aparecendo como disponível
+      // (o useEffect só roda de novo se o dia ou o serviço mudarem).
+      await fetchDayBookings(selectedDay)
+
+      setSelectedTime(undefined)
       setbookingSheetIsOpen(false)
-      toast.success("Reserva criado com sucesso!")
-    } catch {
-      toast.error("Erro ao criar reserva")
+      toast.success("Reserva criada com sucesso!")
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Erro ao criar reserva"
+      toast.error(message)
     }
   }
 

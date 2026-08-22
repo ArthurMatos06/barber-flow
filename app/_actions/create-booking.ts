@@ -35,7 +35,26 @@ export const createBooking = async (params: CreateBookingParams) => {
   if (date < new Date()) {
     throw new Error("Não é possível agendar em uma data passada")
   }
-  // TODO: validar por horarios tbm
+
+  // Verificação a nível de BARBEARIA: o @@unique([date, serviceId]) do
+  // schema só impede o MESMO serviço de ser reservado duas vezes no
+  // mesmo horário. Ele não impede que DOIS SERVIÇOS DIFERENTES da
+  // mesma barbearia colidam no mesmo horário (ex: corte e barba com
+  // o mesmo barbeiro/agenda compartilhada). Por isso checamos aqui
+  // manualmente, além de deixar a constraint do banco como rede de
+  // segurança contra race conditions do próprio serviço.
+  const bookingExists = await db.booking.findFirst({
+    where: {
+      date,
+      service: {
+        barbershopId: service.barbershopId,
+      },
+    },
+  })
+
+  if (bookingExists) {
+    throw new Error("Esse horário já foi reservado. Escolha outro.")
+  }
 
   try {
     await db.booking.create({
