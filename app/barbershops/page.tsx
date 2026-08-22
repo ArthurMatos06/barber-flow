@@ -48,7 +48,10 @@ const BarberShopsPage = async ({ searchParams }: BarberShopsPageProps) => {
         <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
           Resultados para &quot;{params?.service || params?.title}&quot;
         </h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+        {/* Grid responsivo: 2 colunas no mobile e 5 colunas a partir de md.
+            Antes usávamos ShowOnDesktop/ShowOnMobile (JS) para trocar o grid,
+            o que causava hydration mismatch. Agora é só CSS responsivo. */}
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
           {barbershops.map((barberShop) => (
             <BarberShopItem key={barberShop.id} barberShop={barberShop} />
           ))}
