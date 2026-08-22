@@ -3,8 +3,6 @@ import Header from "@/app/components/header"
 import MobileMenu from "@/app/components/MobileMenu"
 import PhoneItem from "@/app/components/phone-item"
 import ServiceItem from "@/app/components/service-item"
-import ShowOnDesktop from "@/app/components/ShowOnDesktop"
-import ShowOnMobile from "@/app/components/ShowOnMobile"
 import { Button } from "@/app/components/ui/button"
 import { ChevronLeftIcon, MapPinIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
@@ -40,7 +38,11 @@ export default async function BarbershopPage({ params }: Props) {
 
   return (
     <>
-      <ShowOnMobile>
+      {/* ================= LAYOUT MOBILE =================
+          Visível apenas abaixo de md (md:hidden). Layout em coluna única,
+          com imagem no topo e seções empilhadas. Usamos classe CSS em vez
+          do antigo componente ShowOnMobile para não gerar hydration mismatch. */}
+      <div className="md:hidden">
         <div>
           {/* Imagem e icones dentro dela*/}
           <div className="relative h-62.5 w-full">
@@ -111,8 +113,12 @@ export default async function BarbershopPage({ params }: Props) {
             ))}
           </div>
         </div>
-      </ShowOnMobile>
-      <ShowOnDesktop>
+      </div>
+      {/* ================= LAYOUT DESKTOP =================
+          Oculto no mobile e visível a partir de md (hidden md:block).
+          Layout mais rico: hero, conteúdo em 2 colunas + sidebar fixa.
+          Classe CSS substitui o antigo componente ShowOnDesktop. */}
+      <div className="hidden md:block">
         <Header />
         <div className="mx-auto max-w-6xl px-8 py-8">
           {/* Hero */}
@@ -191,7 +197,7 @@ export default async function BarbershopPage({ params }: Props) {
             </aside>
           </div>
         </div>
-      </ShowOnDesktop>
+      </div>
     </>
   )
 }
