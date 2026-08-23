@@ -1,6 +1,6 @@
 import Header from "./components/header"
 import BarberShopItem from "./components/barberShop-item"
-import { Button } from "./components/ui/button"
+import { buttonVariants } from "./components/ui/button"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
 import { quickSearchOptions } from "./constants/search"
@@ -11,6 +11,7 @@ import { getServerSession } from "next-auth"
 import { format } from "date-fns/format"
 import { ptBR } from "date-fns/locale/pt-BR"
 import { authOptions } from "./_lib/auth"
+import { cn } from "./_lib/utils"
 
 const page = async () => {
   //chamando banco de dados
@@ -75,22 +76,19 @@ const page = async () => {
         {/*Busca Rápida*/}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
-            <Button
+            <Link
               key={option.label}
-              className="gap-2"
-              variant="secondary"
-              render={
-                <Link href={`/barbershops?service=${option.label}`}>
-                  <Image
-                    src={option.imageUrl}
-                    alt={option.label}
-                    width={16}
-                    height={16}
-                  />
-                  {option.label}
-                </Link>
-              }
-            ></Button>
+              href={`/barbershops?service=${option.label}`}
+              className={cn(buttonVariants({ variant: "secondary" }), "gap-2")}
+            >
+              <Image
+                src={option.imageUrl}
+                alt={option.label}
+                width={16}
+                height={16}
+              />
+              {option.label}
+            </Link>
           ))}
         </div>
         {/* Banner mobile */}

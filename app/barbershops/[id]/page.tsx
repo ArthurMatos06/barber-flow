@@ -101,7 +101,7 @@ export default async function BarbershopPage({ params }: Props) {
                 <ServiceItem
                   key={service.id}
                   service={service}
-                  barbershop={barbershop}
+                  barbershop={{ name: barbershop.name }}
                 />
               ))}
             </div>
@@ -173,7 +173,7 @@ export default async function BarbershopPage({ params }: Props) {
                     <ServiceItem
                       key={service.id}
                       service={service}
-                      barbershop={barbershop}
+                      barbershop={{ name: barbershop.name }}
                     />
                   ))}
                 </div>
