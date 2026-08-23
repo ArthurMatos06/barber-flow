@@ -45,6 +45,20 @@ const Bookings = async () => {
       date: "asc",
     },
   })
+  const serializedBookings = ConfirmedBookings.map((booking) => ({
+    ...booking,
+    service: {
+      ...booking.service,
+      price: Number(booking.service.price),
+    },
+  }))
+  const serializedConcludedBookings = concludedBookings.map((booking) => ({
+    ...booking,
+    service: {
+      ...booking.service,
+      price: Number(booking.service.price),
+    },
+  }))
   return (
     <>
       <Header />
@@ -55,7 +69,7 @@ const Bookings = async () => {
             <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
               Confirmados
             </h2>
-            {ConfirmedBookings.map((booking) => (
+            {serializedBookings.map((booking) => (
               <BookingItem key={booking.id} booking={booking} />
             ))}
           </>
@@ -65,7 +79,7 @@ const Bookings = async () => {
             <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
               Finalizados
             </h2>
-            {concludedBookings.map((booking) => (
+            {serializedConcludedBookings.map((booking) => (
               <BookingItem key={booking.id} booking={booking} />
             ))}
           </>

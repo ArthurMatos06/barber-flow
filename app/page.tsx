@@ -41,6 +41,13 @@ const page = async () => {
         },
       })
     : []
+  const serializedBookings = confirmedBookings.map((booking) => ({
+    ...booking,
+    service: {
+      ...booking.service,
+      price: Number(booking.service.price),
+    },
+  }))
   return (
     <div>
       {/* Header */}
@@ -113,7 +120,7 @@ const page = async () => {
           </>
         )}
         <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {confirmedBookings.map((booking) => (
+          {serializedBookings.map((booking) => (
             <BookingItem key={booking.id} booking={booking} />
           ))}
         </div>

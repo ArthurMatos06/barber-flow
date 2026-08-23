@@ -33,16 +33,22 @@ import { Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { deleteBooking } from "../_actions/delete-booking"
 
-interface BookingProps {
-  booking: Prisma.BookingGetPayload<{
-    include: {
-      service: {
-        include: {
-          barbershop: true
-        }
+type Booking = Prisma.BookingGetPayload<{
+  include: {
+    service: {
+      include: {
+        barbershop: true
       }
     }
-  }>
+  }
+}>
+
+interface BookingProps {
+  booking: Omit<Booking, "service"> & {
+    service: Omit<Booking["service"], "price"> & {
+      price: number
+    }
+  }
 }
 //TODO: receber agendamentos como props e mapear eles, para cada agendamento renderizar um card
 const BookingItem = ({ booking }: BookingProps) => {
