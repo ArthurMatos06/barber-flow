@@ -110,18 +110,21 @@ const page = async () => {
           />
         </div>
         {/*Agendamento*/}
-        {session?.user && (
+        {session?.user && confirmedBookings.length > 0 && (
           <>
             <h1 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase md:text-xl">
               Agendamentos
             </h1>
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {serializedBookings.map((booking) => (
+                <div key={booking.id} className="lg:w-fit lg:flex-none">
+                  <BookingItem booking={booking} />
+                </div>
+              ))}
+            </div>
           </>
         )}
-        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {serializedBookings.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
-        </div>
+
         {/* Recomendados — título mobile */}
         <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase lg:hidden">
           Recomendados para você

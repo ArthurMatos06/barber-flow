@@ -29,9 +29,10 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
 } from "./ui/alert-dialog"
-import { Trash2Icon } from "lucide-react"
+import { Loader2Icon, Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { deleteBooking } from "../_actions/delete-booking"
+import { useRouter } from "next/navigation"
 
 type Booking = Prisma.BookingGetPayload<{
   include: {
@@ -52,8 +53,10 @@ interface BookingProps {
 }
 //TODO: receber agendamentos como props e mapear eles, para cada agendamento renderizar um card
 const BookingItem = ({ booking }: BookingProps) => {
+  const router = useRouter()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [isCancelAlertOpen, setIsCancelAlertOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleCancelClick = () => {
     setIsSheetOpen(false)
@@ -61,13 +64,17 @@ const BookingItem = ({ booking }: BookingProps) => {
   }
 
   const handleCancelBooking = async () => {
+    setIsDeleting(true)
     try {
       await deleteBooking(booking.id)
       toast.success("Reserva cancelada com sucesso!")
+      router.refresh()
+      setIsCancelAlertOpen(false)
     } catch {
       toast.error("Erro ao cancelar reserva.Tente novamente")
+    } finally {
+      setIsDeleting(false)
     }
-    setIsCancelAlertOpen(false)
   }
   const { service } = booking
   const barbershop = service.barbershop
@@ -76,7 +83,8 @@ const BookingItem = ({ booking }: BookingProps) => {
     <>
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger className="w-full" onClick={() => setIsSheetOpen(true)}>
-          <Card className="w-[90vw] max-w-md shrink-0 p-0">
+          {/* card */}
+          <Card className="w-[90vw] max-w-md shrink-0 p-0 lg:w-[448px]">
             <CardContent className="flex justify-between p-0">
               {/*esquerda*/}
               <div className="flex flex-col gap-2 py-5 pl-5">
@@ -220,8 +228,16 @@ const BookingItem = ({ booking }: BookingProps) => {
             <AlertDialogAction
               variant="destructive"
               onClick={handleCancelBooking}
+              disabled={isDeleting}
             >
-              Confirmar
+              {isDeleting ? (
+                <>
+                  <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                  Cancelando...
+                </>
+              ) : (
+                "Confirmar"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
